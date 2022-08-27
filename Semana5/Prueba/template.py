@@ -28,7 +28,9 @@ def template_html(title, body):
                                 </head>
                                 <h1> $Titulo </h1>
                                 <body>
+                                    <ul>
                                     $body
+                                    </ul>
                                 </body>
                                 </html>
                                 ''')
