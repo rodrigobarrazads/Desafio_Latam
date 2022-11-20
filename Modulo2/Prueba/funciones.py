@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import mean_squared_error, r2_score 
+from math import sqrt
 
 
 def graf_pie(data, name_column):
@@ -169,3 +172,49 @@ def dummies(data, columnas):
     df_dummy = pd.concat([data,df_dummy], axis=1)
 
     return df_dummy
+
+
+def matriz_confusion(y_test, y_pred):
+    """
+        Objetivo:
+            - graficar la matriz de confunsión
+        Parámetros:
+            - y_test (list): lista con los valores del vector objetivo
+            - y_pred (list): lista con las predicciones del vector objetivo
+
+        Retorno:
+           - (plot) matriz de confución
+    """
+
+    cf_matrix = confusion_matrix(y_test, y_pred)
+
+    group_names = ['True Neg','False Pos','False Neg','True Pos']
+    group_counts = ["{0:0.0f}".format(value) for value in cf_matrix.flatten()]
+
+    labels = [f"{v1}\n{v2}" for v1, v2 in zip(group_names,group_counts)]
+    labels = np.asarray(labels).reshape(2,2)
+
+    ax = sns.heatmap(cf_matrix,  annot=labels ,fmt='', cmap='Blues')
+
+    ax.set_title('Confusion Matrix\nTrue: >50k\nFalse: <=50k');
+    ax.set_xlabel('Predicted Values')
+    ax.set_ylabel('Actual Values');
+
+    ax.xaxis.set_ticklabels(['False', 'True'])
+    ax.yaxis.set_ticklabels(['False', 'True'])
+
+
+def report_scores(target_testeo, predicciones):
+    """
+        Objetivo:
+            - Reportar las metricas MSE y R2 para un conjunto de datos de testeo y las predicciones de dicho conjunto de datos
+        Parámetros:
+            - target_testeo (serie): serie con los datos de testeo no probados.
+            - predicciones (serie): serie con las predicciones de dichos datos 
+
+        Retorno:
+           - print con los scores de las metricas MSE y R2
+    """
+    print(f"  Mean Error: {(np.mean(target_testeo-predicciones)):.2f}")
+    print(f"  MSE: {mean_squared_error(target_testeo, predicciones):.2f}")
+    print(f'  RMSE: {sqrt(mean_squared_error(target_testeo, predicciones)):.2f}')
