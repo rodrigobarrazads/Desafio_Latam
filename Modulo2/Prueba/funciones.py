@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
-from sklearn.metrics import mean_squared_error, r2_score 
+from sklearn.metrics import mean_squared_error, mean_absolute_error 
 from math import sqrt
 
 
@@ -215,6 +215,6 @@ def report_scores(target_testeo, predicciones):
         Retorno:
            - print con los scores de las metricas MSE y R2
     """
-    print(f"  Mean Error: {(np.mean(target_testeo-predicciones)):.2f}")
+    print(f"  MAE: {mean_absolute_error(target_testeo, predicciones):.2f}")
     print(f"  MSE: {mean_squared_error(target_testeo, predicciones):.2f}")
     print(f'  RMSE: {sqrt(mean_squared_error(target_testeo, predicciones)):.2f}')
