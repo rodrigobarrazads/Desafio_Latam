@@ -2,12 +2,15 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import nltk
+import spacy 
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from wordcloud import WordCloud
 from sklearn.metrics import classification_report, confusion_matrix
+
+# Definimos el idioma para la lemmatización
+nlp = spacy.load('en_core_web_sm')
 
 def porcentaje_null(data):  
     """
@@ -44,8 +47,6 @@ def graf_word_cloud(df, columna):
     text_clean = []
     words = []
     words_graf = []
-    tokenizer = RegexpTokenizer(r'\w+')
-    lematizer = WordNetLemmatizer()
 
     stop_words = list(stopwords.words('english'))
     stop_words.append('im')
@@ -53,11 +54,11 @@ def graf_word_cloud(df, columna):
 
     for i, row in enumerate(df[columna]):
         words = []
-        tokens = tokenizer.tokenize(row)
-        for tok in tokens:
-            if tok not in stop_words:
-                words.append(lematizer.lemmatize(tok))
-                words_graf.append(lematizer.lemmatize(tok))
+        for tok in nlp(row):
+            tok = tok.lemma_
+            if tok not in stop_words and tok not in ['-pron-','-PRON-']:
+                words.append(tok)
+                words_graf.append(tok)
         text_clean.insert(i," ".join(words))
     df['content_clean'] = text_clean
 
