@@ -210,7 +210,7 @@ def dummies(data, columnas):
     return df_dummy
 
 
-def matriz_confusion(y_test, y_pred):
+def matriz_confusion(y_test, y_pred, title='Confusion Matrix\n'):
     """
         Objetivo:
             - graficar la matriz de confunsión
@@ -231,7 +231,7 @@ def matriz_confusion(y_test, y_pred):
 
     ax = sns.heatmap(cf_matrix,  annot=labels ,fmt='', cmap='Blues')
 
-    ax.set_title('Confusion Matrix\nTrue: >50k\nFalse: <=50k');
+    ax.set_title(f'{title}');
     ax.set_xlabel('Predicted Values')
     ax.set_ylabel('Actual Values');
 
